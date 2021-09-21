@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: 
     guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Scenes/Flower/Flower.unity
+    path: Assets/Scenes/FlowerGarden/FlowerGarden.unity
     guid: f2cdb8734d7eeb14a81d261d61fce3fc
   m_configObjects: {}
