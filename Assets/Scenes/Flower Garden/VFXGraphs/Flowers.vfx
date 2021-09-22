@@ -13,7 +13,17 @@ MonoBehaviour:
   m_Name: VFXUI
   m_EditorClassIdentifier: 
   groupInfos: []
-  stickyNoteInfos: []
+  stickyNoteInfos:
+  - title: 
+    position:
+      serializedVersion: 2
+      x: -3377
+      y: -540
+      width: 290
+      height: 100
+    contents: Color.x is used as a random number for each flower.
+    theme: Black
+    textSize: Small
   categories: []
   uiBounds:
     serializedVersion: 2
@@ -1165,6 +1175,7 @@ MonoBehaviour:
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots:
+  - {fileID: 8926484042661618415}
   - {fileID: 8926484042661615720}
   - {fileID: 8926484042661615721}
   m_OutputSlots: []
@@ -1194,7 +1205,7 @@ MonoBehaviour:
   indirectDraw: 0
   computeCulling: 0
   frustumCulling: 0
-  castShadows: 0
+  castShadows: 1
   useExposureWeight: 0
   flipbookLayout: 0
   shaderGraph: {fileID: 0}
@@ -1770,7 +1781,7 @@ MonoBehaviour:
   - {fileID: 8926484042661615992}
   - {fileID: 8926484042661616269}
   dataType: 0
-  capacity: 8384
+  capacity: 8192
   stripCapacity: 1
   particlePerStripCount: 128
   needsComputeBounds: 0
@@ -8334,7 +8345,7 @@ MonoBehaviour:
   m_UIIgnoredErrors: []
   m_Parent: {fileID: 114350483966674976}
   m_Children: []
-  m_UIPosition: {x: -1867, y: 1200}
+  m_UIPosition: {x: -1860, y: 1200}
   m_UICollapsed: 0
   m_UISuperCollapsed: 1
   m_InputSlots:
@@ -8913,7 +8924,7 @@ MonoBehaviour:
   m_UIIgnoredErrors: []
   m_Parent: {fileID: 114350483966674976}
   m_Children: []
-  m_UIPosition: {x: -2046, y: 1154}
+  m_UIPosition: {x: -2039, y: 1155}
   m_UICollapsed: 0
   m_UISuperCollapsed: 1
   m_InputSlots:
@@ -9129,7 +9140,7 @@ MonoBehaviour:
   materialOffset: 1
   m_SubOutputs:
   - {fileID: 8926484042661617041}
-  cullMode: 3
+  cullMode: 0
   zWriteMode: 0
   zTestMode: 0
   colorMapping: 0
@@ -9157,7 +9168,7 @@ MonoBehaviour:
   useEmissiveMap: 0
   colorMode: 1
   useEmissive: 0
-  doubleSided: 1
+  doubleSided: 0
   preserveSpecularLighting: 0
   enableShadows: 1
   enableSpecular: 1
@@ -12955,7 +12966,7 @@ MonoBehaviour:
   m_UIIgnoredErrors: []
   m_Parent: {fileID: 114350483966674976}
   m_Children: []
-  m_UIPosition: {x: -2304, y: 1597}
+  m_UIPosition: {x: -2304, y: 1603}
   m_UICollapsed: 0
   m_UISuperCollapsed: 1
   m_InputSlots:
@@ -13846,7 +13857,7 @@ MonoBehaviour:
     linkedSlots:
     - outputSlot: {fileID: 8926484042661618106}
       inputSlot: {fileID: 8926484042661616973}
-    position: {x: -2014, y: 1189}
+    position: {x: -2052, y: 1189}
     expandedSlots: []
     expanded: 0
 --- !u!114 &8926484042661618106
@@ -14062,7 +14073,7 @@ MonoBehaviour:
     linkedSlots:
     - outputSlot: {fileID: 8926484042661618112}
       inputSlot: {fileID: 8926484042661616978}
-    position: {x: -2013, y: 1233}
+    position: {x: -2049, y: 1234}
     expandedSlots: []
     expanded: 0
 --- !u!114 &8926484042661618112
@@ -17199,3 +17210,37 @@ MonoBehaviour:
   m_Direction: 1
   m_LinkedSlots:
   - {fileID: 8926484042661618410}
+--- !u!114 &8926484042661618415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f780aa281814f9842a7c076d436932e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UIIgnoredErrors: []
+  m_Parent: {fileID: 0}
+  m_Children: []
+  m_UIPosition: {x: 0, y: 0}
+  m_UICollapsed: 1
+  m_UISuperCollapsed: 0
+  m_MasterSlot: {fileID: 8926484042661618415}
+  m_MasterData:
+    m_Owner: {fileID: 8926484042661615719}
+    m_Value:
+      m_Type:
+        m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
+          PublicKeyToken=b77a5c561934e089
+      m_SerializableObject: 0
+    m_Space: 2147483647
+  m_Property:
+    name: alphaThreshold
+    m_serializedType:
+      m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+  m_Direction: 0
+  m_LinkedSlots: []
