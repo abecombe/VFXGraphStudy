@@ -3530,7 +3530,7 @@ MonoBehaviour:
   useEmissiveMap: 0
   colorMode: 1
   useEmissive: 0
-  doubleSided: 0
+  doubleSided: 1
   preserveSpecularLighting: 0
   enableShadows: 1
   enableSpecular: 1
@@ -3859,7 +3859,7 @@ MonoBehaviour:
   useEmissiveMap: 0
   colorMode: 1
   useEmissive: 0
-  doubleSided: 0
+  doubleSided: 1
   preserveSpecularLighting: 0
   enableShadows: 1
   enableSpecular: 1
