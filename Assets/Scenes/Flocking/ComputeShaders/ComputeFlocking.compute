@@ -8,6 +8,8 @@
 
 RWStructuredBuffer<float3> _PositionBuffer;
 RWStructuredBuffer<float3> _VelocityBuffer;
+RWStructuredBuffer<float3> _SmoothedPositionBuffer;
+RWStructuredBuffer<float3> _SmoothedVelocityBuffer;
 
 int    _NumInstance;
 
@@ -103,6 +105,8 @@ void FlockingCS(uint3 DTid : SV_DispatchThreadID)
 
 	float3 position = _PositionBuffer[P_ID];
 	float3 velocity = _VelocityBuffer[P_ID];
+	float3 smoothedPosition = _SmoothedPositionBuffer[P_ID];
+	float3 smoothedVelocity = _SmoothedVelocityBuffer[P_ID];
 
 	float3 acceleration = (float3)0;
 	acceleration += Flock(position, velocity);
@@ -115,4 +119,6 @@ void FlockingCS(uint3 DTid : SV_DispatchThreadID)
 
 	_PositionBuffer[P_ID] = position;
 	_VelocityBuffer[P_ID] = velocity;
+	_SmoothedPositionBuffer[P_ID] = 0.9 * smoothedPosition + 0.1 * position;
+	_SmoothedVelocityBuffer[P_ID] = 0.9 * smoothedVelocity + 0.1 * velocity;
 }

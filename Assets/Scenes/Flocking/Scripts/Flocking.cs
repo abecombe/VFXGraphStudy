@@ -17,10 +17,22 @@ public class Flocking : MonoBehaviour
 		return _positionBuffer != null ? _positionBuffer : null;
 	}
 
+	GraphicsBuffer _smoothedPositionBuffer;
+	public GraphicsBuffer SmoothedPositionBuffer()
+	{
+		return _smoothedPositionBuffer != null ? _smoothedPositionBuffer : null;
+	}
+
 	GraphicsBuffer _velocityBuffer;
 	public GraphicsBuffer VelocityBuffer()
 	{
 		return _velocityBuffer != null ? _velocityBuffer : null;
+	}
+
+	GraphicsBuffer _smoothedVelocityBuffer;
+	public GraphicsBuffer SmoothedVelocityBuffer()
+	{
+		return _smoothedVelocityBuffer != null ? _smoothedVelocityBuffer : null;
 	}
 
 	#endregion
@@ -211,6 +223,9 @@ public class Flocking : MonoBehaviour
 	{
 		_positionBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, numInstance, Marshal.SizeOf(typeof(Vector3)));
 		_velocityBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, numInstance, Marshal.SizeOf(typeof(Vector3)));
+		_smoothedPositionBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, numInstance, Marshal.SizeOf(typeof(Vector3)));
+		_smoothedVelocityBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, numInstance, Marshal.SizeOf(typeof(Vector3)));
+
 		var positionArray = new Vector3[numInstance];
 		var velocityArray = new Vector3[numInstance];
 		for (var i = 0; i < numInstance; i++)
@@ -220,8 +235,12 @@ public class Flocking : MonoBehaviour
 			var phi = Mathf.Asin(Random.Range(-1f, 1f));
 			velocityArray[i] = new Vector3(Mathf.Cos(phi) * Mathf.Cos(theta), Mathf.Cos(phi) * Mathf.Sin(theta), Mathf.Sin(phi)) * (_speedRange.x + _speedRange.y) * 0.5f;
 		}
+
 		_positionBuffer.SetData(positionArray);
 		_velocityBuffer.SetData(velocityArray);
+		_smoothedPositionBuffer.SetData(positionArray);
+		_smoothedVelocityBuffer.SetData(velocityArray);
+
 		positionArray = null;
 		velocityArray = null;
 	}
@@ -242,6 +261,8 @@ public class Flocking : MonoBehaviour
 
 		cs.SetBuffer(kernelID, "_PositionBuffer", _positionBuffer);
 		cs.SetBuffer(kernelID, "_VelocityBuffer", _velocityBuffer);
+		cs.SetBuffer(kernelID, "_SmoothedPositionBuffer", _smoothedPositionBuffer);
+		cs.SetBuffer(kernelID, "_SmoothedVelocityBuffer", _smoothedVelocityBuffer);
 
 		cs.SetInt("_NumInstance", numInstance);
 
@@ -263,13 +284,15 @@ public class Flocking : MonoBehaviour
 	{
 		if (_positionBuffer != null) { _positionBuffer.Release(); _positionBuffer = null; }
 		if (_velocityBuffer != null) { _velocityBuffer.Release(); _velocityBuffer = null; }
+		if (_smoothedPositionBuffer != null) { _smoothedPositionBuffer.Release(); _smoothedPositionBuffer = null; }
+		if (_smoothedVelocityBuffer != null) { _smoothedVelocityBuffer.Release(); _smoothedVelocityBuffer = null; }
 	}
 
 	void RenderInstancedMesh()
 	{
 		var vfx = GetComponent<VisualEffect>();
-		vfx.SetGraphicsBuffer("PositionBuffer", _positionBuffer);
-		vfx.SetGraphicsBuffer("VelocityBuffer", _velocityBuffer);
+		vfx.SetGraphicsBuffer("PositionBuffer", _smoothedPositionBuffer);
+		vfx.SetGraphicsBuffer("VelocityBuffer", _smoothedVelocityBuffer);
 	}
 
 	#endregion
