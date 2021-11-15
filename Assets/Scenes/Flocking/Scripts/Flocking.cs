@@ -188,6 +188,7 @@ public class Flocking : MonoBehaviour
 	{
 		var vfx = GetComponent<VisualEffect>();
 		vfx.SetFloat("NumInstance", numInstance);
+
 		InitBuffer();
 	}
 
@@ -209,14 +210,17 @@ public class Flocking : MonoBehaviour
 
     #region Private Functions
 
-    Vector2 GetMousePosition()
+    Vector2 GetTargetPosition()
     {
-		Vector2 mousePosition = Input.mousePosition;
-		mousePosition /= new Vector2(Screen.width, Screen.height);
-		if (mousePosition.x < 0f || mousePosition.x > 1f || mousePosition.y < 0f || mousePosition.y > 1f)
-			mousePosition = new Vector2(0.5f, 0.5f);
+		var MainCamera = Camera.main.gameObject.GetComponent<Camera>();
+		var width = -MainCamera.transform.position.z * Mathf.Tan(MainCamera.fieldOfView * 0.5f * Mathf.PI / 180f) * 2f;
+		var height = width * Screen.height / Screen.width;
+		var mousePosition = Input.mousePosition / new Vector2(Screen.width, Screen.height) - Vector2.one * 0.5f;
+		if (Mathf.Abs(mousePosition.x) > 0.5f || Mathf.Abs(mousePosition.y) > 0.5f)
+			mousePosition = Vector2.zero;
+		mousePosition *= new Vector2(width, height);
 
-		return mousePosition;
+		return new Vector3(mousePosition.x, mousePosition.y, 0f);
 	}
 
     void InitBuffer()
@@ -247,8 +251,7 @@ public class Flocking : MonoBehaviour
 
 	void Simulation()
 	{
-		var mousePosition = GetMousePosition();
-		var _targetPosition = new Vector3((mousePosition.x - 0.5f) * 20f, (mousePosition.y - 0.5f) * 11f, 0f);
+		var _targetPosition = GetTargetPosition();
 
 		ComputeShader cs = _flockingCS;
 		int kernelID = -1;
