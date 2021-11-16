@@ -46,7 +46,7 @@ public class FlockingEditor : Editor
 
 		serializedObject.Update();
 
-		EditorGUILayout.Space(3);
+		EditorGUILayout.Space(1);
 
 		EditorGUILayout.LabelField("Instancing", EditorStyles.boldLabel);
 		EditorGUILayout.Space(1);
@@ -67,12 +67,12 @@ public class FlockingEditor : Editor
 			var speedRange = flocking.speedRange;
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.PrefixLabel("Speed Range");
-			GUILayout.Label("Min", GUILayout.Width(60));
+			GUILayout.Label("Min", GUILayout.Width(28));
 			speedRange.x = EditorGUILayout.FloatField(speedRange.x);
 			EditorGUILayout.EndHorizontal();
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.PrefixLabel(" ");
-			GUILayout.Label("Max", GUILayout.Width(60));
+			GUILayout.Label("Max", GUILayout.Width(28));
 			speedRange.y = EditorGUILayout.FloatField(speedRange.y);
 			EditorGUILayout.EndHorizontal();
 			flocking.speedRange = speedRange;
@@ -82,17 +82,17 @@ public class FlockingEditor : Editor
 			var forceWeight = flocking.forceWeight;
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.PrefixLabel("Force Weight");
-			GUILayout.Label("alignment", GUILayout.Width(60));
+			GUILayout.Label("alignment", GUILayout.Width(66));
 			forceWeight.x = EditorGUILayout.FloatField(forceWeight.x);
 			EditorGUILayout.EndHorizontal();
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.PrefixLabel(" ");
-			GUILayout.Label("cohesion", GUILayout.Width(60));
+			GUILayout.Label("cohesion", GUILayout.Width(66));
 			forceWeight.y = EditorGUILayout.FloatField(forceWeight.y);
 			EditorGUILayout.EndHorizontal();
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.PrefixLabel(" ");
-			GUILayout.Label("Separation", GUILayout.Width(60));
+			GUILayout.Label("Separation", GUILayout.Width(66));
 			forceWeight.z = EditorGUILayout.FloatField(forceWeight.z);
 			EditorGUILayout.EndHorizontal();
 			flocking.forceWeight = forceWeight;
@@ -102,17 +102,17 @@ public class FlockingEditor : Editor
 			var perceptionRadius = flocking.perceptionRadius;
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.PrefixLabel("Perception Radius");
-			GUILayout.Label("alignment", GUILayout.Width(60));
+			GUILayout.Label("alignment", GUILayout.Width(66));
 			perceptionRadius.x = EditorGUILayout.FloatField(perceptionRadius.x);
 			EditorGUILayout.EndHorizontal();
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.PrefixLabel(" ");
-			GUILayout.Label("cohesion", GUILayout.Width(60));
+			GUILayout.Label("cohesion", GUILayout.Width(66));
 			perceptionRadius.y = EditorGUILayout.FloatField(perceptionRadius.y);
 			EditorGUILayout.EndHorizontal();
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.PrefixLabel(" ");
-			GUILayout.Label("Separation", GUILayout.Width(60));
+			GUILayout.Label("Separation", GUILayout.Width(66));
 			perceptionRadius.z = EditorGUILayout.FloatField(perceptionRadius.z);
 			EditorGUILayout.EndHorizontal();
 			flocking.perceptionRadius = perceptionRadius;
@@ -142,12 +142,12 @@ public class FlockingEditor : Editor
 			var scaleRange = flocking.scaleRange;
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.PrefixLabel("Scale Range");
-			GUILayout.Label("Min", GUILayout.Width(30));
+			GUILayout.Label("Min", GUILayout.Width(28));
 			scaleRange.x = EditorGUILayout.FloatField(scaleRange.x);
 			EditorGUILayout.EndHorizontal();
 			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.PrefixLabel(" ");
-			GUILayout.Label("Max", GUILayout.Width(30));
+			GUILayout.Label("Max", GUILayout.Width(28));
 			scaleRange.y = EditorGUILayout.FloatField(scaleRange.y);
 			EditorGUILayout.EndHorizontal();
 			flocking.scaleRange = scaleRange;
