@@ -21,11 +21,6 @@ public class FlockingEditor : Editor
 	SerializedProperty _scaleRange;
 	SerializedProperty _animationSpeed;
 
-	static GUIContent _textCenter = new GUIContent("Center");
-	static GUIContent _textSize = new GUIContent("Size");
-	static GUIContent _textAmplitude = new GUIContent("Amplitude");
-	static GUIContent _textFrequency = new GUIContent("Frequency");
-
 	void OnEnable()
 	{
 		_flockingCS = serializedObject.FindProperty("_flockingCS");
@@ -51,30 +46,116 @@ public class FlockingEditor : Editor
 
 		serializedObject.Update();
 
-		EditorGUI.BeginChangeCheck();
-		EditorGUILayout.PropertyField(_numInstance);
-		if (EditorGUI.EndChangeCheck())
-			flocking.NotifyConfigChange();
-		EditorGUILayout.Space();
+		EditorGUILayout.Space(3);
+
+		EditorGUILayout.LabelField("Instancing", EditorStyles.boldLabel);
+		EditorGUILayout.Space(1);
+		using (new EditorGUI.IndentLevelScope(1))
+		{
+			EditorGUI.BeginChangeCheck();
+			EditorGUILayout.PropertyField(_numInstance);
+			if (EditorGUI.EndChangeCheck())
+				flocking.NotifyConfigChange();
+		}
+
+		EditorGUILayout.Space(5);
 
 		EditorGUILayout.LabelField("Flocking", EditorStyles.boldLabel);
-		EditorGUILayout.PropertyField(_speedRange);
-		EditorGUILayout.PropertyField(_forceWeight);
-		EditorGUILayout.PropertyField(_perceptionRadius);
-		EditorGUILayout.PropertyField(_maxSteerForce);
+		EditorGUILayout.Space(1);
+		using (new EditorGUI.IndentLevelScope(1))
+		{
+			var speedRange = flocking.speedRange;
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.PrefixLabel("Speed Range");
+			GUILayout.Label("Min", GUILayout.Width(60));
+			speedRange.x = EditorGUILayout.FloatField(speedRange.x);
+			EditorGUILayout.EndHorizontal();
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.PrefixLabel(" ");
+			GUILayout.Label("Max", GUILayout.Width(60));
+			speedRange.y = EditorGUILayout.FloatField(speedRange.y);
+			EditorGUILayout.EndHorizontal();
+			flocking.speedRange = speedRange;
 
-		EditorGUILayout.Space();
+			EditorGUILayout.Space(3);
 
-		EditorGUILayout.LabelField("TargetSeeking", EditorStyles.boldLabel);
-		EditorGUILayout.PropertyField(_targetObject);
-		EditorGUILayout.PropertyField(_targetSeekForce);
-		EditorGUILayout.PropertyField(_targetSeekClampDistance);
+			var forceWeight = flocking.forceWeight;
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.PrefixLabel("Force Weight");
+			GUILayout.Label("alignment", GUILayout.Width(60));
+			forceWeight.x = EditorGUILayout.FloatField(forceWeight.x);
+			EditorGUILayout.EndHorizontal();
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.PrefixLabel(" ");
+			GUILayout.Label("cohesion", GUILayout.Width(60));
+			forceWeight.y = EditorGUILayout.FloatField(forceWeight.y);
+			EditorGUILayout.EndHorizontal();
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.PrefixLabel(" ");
+			GUILayout.Label("Separation", GUILayout.Width(60));
+			forceWeight.z = EditorGUILayout.FloatField(forceWeight.z);
+			EditorGUILayout.EndHorizontal();
+			flocking.forceWeight = forceWeight;
 
-		EditorGUILayout.Space();
+			EditorGUILayout.Space(3);
+
+			var perceptionRadius = flocking.perceptionRadius;
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.PrefixLabel("Perception Radius");
+			GUILayout.Label("alignment", GUILayout.Width(60));
+			perceptionRadius.x = EditorGUILayout.FloatField(perceptionRadius.x);
+			EditorGUILayout.EndHorizontal();
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.PrefixLabel(" ");
+			GUILayout.Label("cohesion", GUILayout.Width(60));
+			perceptionRadius.y = EditorGUILayout.FloatField(perceptionRadius.y);
+			EditorGUILayout.EndHorizontal();
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.PrefixLabel(" ");
+			GUILayout.Label("Separation", GUILayout.Width(60));
+			perceptionRadius.z = EditorGUILayout.FloatField(perceptionRadius.z);
+			EditorGUILayout.EndHorizontal();
+			flocking.perceptionRadius = perceptionRadius;
+
+			EditorGUILayout.Space(3);
+
+			EditorGUILayout.PropertyField(_maxSteerForce);
+		}
+
+		EditorGUILayout.Space(5);
+
+		EditorGUILayout.LabelField("Target Seeking", EditorStyles.boldLabel);
+		EditorGUILayout.Space(1);
+		using (new EditorGUI.IndentLevelScope(1))
+		{
+			EditorGUILayout.PropertyField(_targetObject);
+			flocking.targetSeekForce = EditorGUILayout.FloatField("Seek Force", flocking.targetSeekForce);
+			flocking.targetSeekClampDistance = EditorGUILayout.FloatField("Seek Clamp Distance", flocking.targetSeekClampDistance);
+		}
+
+		EditorGUILayout.Space(5);
 
 		EditorGUILayout.LabelField("Rendering", EditorStyles.boldLabel);
-		EditorGUILayout.PropertyField(_scaleRange);
-		EditorGUILayout.PropertyField(_animationSpeed);
+		EditorGUILayout.Space(1);
+		using (new EditorGUI.IndentLevelScope(1))
+		{
+			var scaleRange = flocking.scaleRange;
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.PrefixLabel("Scale Range");
+			GUILayout.Label("Min", GUILayout.Width(30));
+			scaleRange.x = EditorGUILayout.FloatField(scaleRange.x);
+			EditorGUILayout.EndHorizontal();
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.PrefixLabel(" ");
+			GUILayout.Label("Max", GUILayout.Width(30));
+			scaleRange.y = EditorGUILayout.FloatField(scaleRange.y);
+			EditorGUILayout.EndHorizontal();
+			flocking.scaleRange = scaleRange;
+
+			EditorGUILayout.Space(3);
+
+			EditorGUILayout.PropertyField(_animationSpeed);
+		}
 
 		serializedObject.ApplyModifiedProperties();
 	}
