@@ -119,6 +119,6 @@ void FlockingCS(uint3 DTid : SV_DispatchThreadID)
 
 	_PositionBuffer[P_ID] = position;
 	_VelocityBuffer[P_ID] = velocity;
-	_SmoothedPositionBuffer[P_ID] = 0.9 * smoothedPosition + 0.1 * position;
-	_SmoothedVelocityBuffer[P_ID] = 0.9 * smoothedVelocity + 0.1 * velocity;
+	_SmoothedPositionBuffer[P_ID] = 0.925 * smoothedPosition + 0.075 * position;
+	_SmoothedVelocityBuffer[P_ID] = 0.925 * smoothedVelocity + 0.075 * velocity;
 }

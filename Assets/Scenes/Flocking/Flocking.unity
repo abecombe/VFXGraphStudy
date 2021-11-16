@@ -301,13 +301,10 @@ MonoBehaviour:
   _forceWeight: {x: 3, y: 3, z: 10}
   _perceptionRadius: {x: 0.2, y: 0.2, z: 0.2}
   _maxSteerForce: 60
-  _targetPosition: {x: 0.27, y: 0, z: 0}
   _targetSeekForce: 1
   _targetClampDistance: 1
-  _mesh: {fileID: 0}
-  _scale: 0
-  _scaleRandomness: 0
-  _material: {fileID: 0}
+  _scaleRange: {x: 0.012, y: 0.02}
+  _animationSpeed: 3
   _randomSeed: 0.5
 --- !u!1 &354796211
 GameObject:

@@ -88,14 +88,6 @@ public class Flocking : MonoBehaviour
 	#region seeking Parameters
 
 	[SerializeField]
-	Vector3 _targetPosition = Vector3.zero;
-	public Vector3 targetPosition
-	{
-		get { return _targetPosition; }
-		set { _targetPosition = value; }
-	}
-
-	[SerializeField]
 	float _targetSeekForce = 0f;
 	public float targetSeekForce
 	{
@@ -116,35 +108,19 @@ public class Flocking : MonoBehaviour
 	#region Render Settings
 
 	[SerializeField]
-	Mesh _mesh = null;
-	public Mesh mesh
+	Vector2 _scaleRange = Vector2.zero;
+	public Vector2 scaleRange
 	{
-		get { return _mesh; }
-		set { _mesh = value; }
+		get { return _scaleRange; }
+		set { _scaleRange = value; }
 	}
 
 	[SerializeField]
-	float _scale = 0f;
-	public float scale
+	float _animationSpeed;
+	public float animationSpeed
 	{
-		get { return _scale; }
-		set { _scale = value; }
-	}
-
-	[SerializeField, Range(0, 1)]
-	float _scaleRandomness = 0f;
-	public float scaleRandomness
-	{
-		get { return _scaleRandomness; }
-		set { _scaleRandomness = value; }
-	}
-
-	[SerializeField]
-	Material _material;
-	public Material material
-	{
-		get { return _material; }
-		set { _material = value; }
+		get { return _animationSpeed; }
+		set { _animationSpeed = value; }
 	}
 
 	#endregion
@@ -296,6 +272,8 @@ public class Flocking : MonoBehaviour
 		var vfx = GetComponent<VisualEffect>();
 		vfx.SetGraphicsBuffer("PositionBuffer", _smoothedPositionBuffer);
 		vfx.SetGraphicsBuffer("VelocityBuffer", _smoothedVelocityBuffer);
+		vfx.SetVector2("ScaleRange", _scaleRange);
+		vfx.SetFloat("AnimationSpeed", _animationSpeed);
 	}
 
 	#endregion
