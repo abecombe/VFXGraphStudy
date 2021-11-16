@@ -2,9 +2,9 @@
 
 #include "UnityCG.cginc"
 
-#define align 0
+#define alignment 0
 #define cohesion 1
-#define seperate 2
+#define Separation 2
 
 RWStructuredBuffer<float3> _PositionBuffer;
 RWStructuredBuffer<float3> _VelocityBuffer;
@@ -13,14 +13,14 @@ RWStructuredBuffer<float3> _SmoothedVelocityBuffer;
 
 int    _NumInstance;
 
-float2 _SpeedRange;
-float3 _ForceWeight;      // align, cohesion, seperate
-float3 _PerceptionRadius; // align, cohesion, seperate
+float2 _SpeedRange;       // min, max
+float3 _ForceWeight;      // alignment, cohesion, Separation
+float3 _PerceptionRadius; // alignment, cohesion, Separation
 float  _MaxSteerForce;
 
 float3 _TargetPosition;
 float  _TargetSeekForce;
-float  _TargetClampDistance;
+float  _TargetSeekClampDistance;
 
 float  _DeltaTime;
 
@@ -33,9 +33,9 @@ float3 calcSteer(float3 forceSum, float3 velocity)
 float3 Flock(in float3 positionA, in float3 velocityA)
 {
 	int3 numFlockMates = (int3)0;
-	float3 alignSum    = (float3)0;
-	float3 cohesionSum = (float3)0;
-	float3 seperateSum = (float3)0;
+	float3 alignmentSum  = (float3)0;
+	float3 cohesionSum   = (float3)0;
+	float3 SeparationSum = (float3)0;
 
 	for (int i = 0; i < _NumInstance; i++)
 	{
@@ -45,44 +45,44 @@ float3 Flock(in float3 positionA, in float3 velocityA)
 		float3 offset = positionB - positionA;
 		float  distance = length(offset);
 
-		if (distance != 0 && distance < _PerceptionRadius[align])
+		if (distance != 0 && distance < _PerceptionRadius[alignment])
 		{
-			numFlockMates[align]++;
-			alignSum += velocityB;
+			numFlockMates[alignment]++;
+			alignmentSum += velocityB;
 		}
 		if (distance != 0 && distance < _PerceptionRadius[cohesion])
 		{
 			numFlockMates[cohesion]++;
 			cohesionSum += offset;
 		}
-		if (distance != 0 && distance < _PerceptionRadius[seperate])
+		if (distance != 0 && distance < _PerceptionRadius[Separation])
 		{
-			numFlockMates[seperate]++;
-			seperateSum -= offset / distance;
+			numFlockMates[Separation]++;
+			SeparationSum -= offset / distance;
 		}
 	}
 
-	float3 alignForce    = (float3)0;
-	float3 cohesionForce = (float3)0;
-	float3 seperateForce = (float3)0;
+	float3 alignmentForce  = (float3)0;
+	float3 cohesionForce   = (float3)0;
+	float3 SeparationForce = (float3)0;
 
-	if (numFlockMates[align] != 0)
+	if (numFlockMates[alignment] != 0)
 	{
-		alignForce    = calcSteer(normalize(alignSum), velocityA);
+		alignmentForce    = calcSteer(normalize(alignmentSum), velocityA);
 	}
 	if (numFlockMates[cohesion] != 0)
 	{
 		cohesionForce = calcSteer(normalize(cohesionSum), velocityA);
 	}
-	if (numFlockMates[seperate] != 0)
+	if (numFlockMates[Separation] != 0)
 	{
-		seperateForce = calcSteer(normalize(seperateSum), velocityA);
+		SeparationForce = calcSteer(normalize(SeparationSum), velocityA);
 	}
 
 	float3 acceleration = (float3)0;
-	acceleration += alignForce    * _ForceWeight[align];
-	acceleration += cohesionForce * _ForceWeight[cohesion];
-	acceleration += seperateForce * _ForceWeight[seperate];
+	acceleration += alignmentForce  * _ForceWeight[alignment];
+	acceleration += cohesionForce   * _ForceWeight[cohesion];
+	acceleration += SeparationForce * _ForceWeight[Separation];
 	
 	return acceleration;
 }
@@ -91,11 +91,12 @@ float3 SeekTarget(in float3 positionA, in float3 velocityA)
 {
 	float3 offset = _TargetPosition - positionA;
 	float distance = length(offset);
-	float force = clamp(distance, 0, _TargetClampDistance) / _TargetClampDistance;
+	float force = clamp(distance, 0, _TargetSeekClampDistance) / _TargetSeekClampDistance;
 
 	float3 seekForce = calcSteer(normalize(offset) * force, velocityA);
+	float3 acceleration = seekForce * _TargetSeekForce;
 	
-	return seekForce * _TargetSeekForce;
+	return acceleration;
 }
 
 [numthreads(256, 1, 1)]

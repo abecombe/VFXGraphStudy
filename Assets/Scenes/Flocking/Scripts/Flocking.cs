@@ -1,7 +1,6 @@
 using UnityEngine;
-using UnityEngine.Rendering;
-using System.Runtime.InteropServices;
 using UnityEngine.VFX;
+using System.Runtime.InteropServices;
 
 [RequireComponent(typeof(VisualEffect))]
 public class Flocking : MonoBehaviour
@@ -39,11 +38,11 @@ public class Flocking : MonoBehaviour
 
 	#region Instancing Parameters
 
-	[SerializeField]
-	int _numInstance = 10000;
+	[SerializeField, Range(256, 8192)]
+	int _numInstance = 1024;
 	public int numInstance
 	{
-		get { return Mathf.Max(_numInstance, 256); }
+		get { return _numInstance; }
 		set { _numInstance = value; }
 	}
 
@@ -85,7 +84,15 @@ public class Flocking : MonoBehaviour
 
 	#endregion
 
-	#region seeking Parameters
+	#region Target Seeking Parameters
+
+	[SerializeField]
+	GameObject _targetObject = null;
+	public GameObject targetObject
+	{
+		get { return _targetObject; }
+		set { _targetObject = value; }
+	}
 
 	[SerializeField]
 	float _targetSeekForce = 0f;
@@ -96,16 +103,16 @@ public class Flocking : MonoBehaviour
 	}
 
 	[SerializeField]
-	float _targetClampDistance = 0f;
-	public float targetClampDistance
+	float _targetSeekClampDistance = 0f;
+	public float targetSeekClampDistance
 	{
-		get { return _targetClampDistance; }
-		set { _targetClampDistance = value; }
+		get { return _targetSeekClampDistance; }
+		set { _targetSeekClampDistance = value; }
 	}
 
 	#endregion
 
-	#region Render Settings
+	#region Rendering Settings
 
 	[SerializeField]
 	Vector2 _scaleRange = Vector2.zero;
@@ -121,19 +128,6 @@ public class Flocking : MonoBehaviour
 	{
 		get { return _animationSpeed; }
 		set { _animationSpeed = value; }
-	}
-
-	#endregion
-
-	#region Misc Settings
-
-	[SerializeField, Range(0, 1)]
-	float _randomSeed = 0.5f;
-
-	public float randomSeed
-	{
-		get { return _randomSeed; }
-		set { _randomSeed = value; }
 	}
 
 	#endregion
@@ -162,9 +156,6 @@ public class Flocking : MonoBehaviour
 
 	void Start()
 	{
-		var vfx = GetComponent<VisualEffect>();
-		vfx.SetFloat("NumInstance", numInstance);
-
 		InitBuffer();
 	}
 
@@ -186,31 +177,21 @@ public class Flocking : MonoBehaviour
 
     #region Private Functions
 
-    Vector2 GetTargetPosition()
-    {
-		var MainCamera = Camera.main.gameObject.GetComponent<Camera>();
-		var width = -MainCamera.transform.position.z * Mathf.Tan(MainCamera.fieldOfView * 0.5f * Mathf.PI / 180f) * 2f;
-		var height = width * Screen.height / Screen.width;
-		var mousePosition = Input.mousePosition / new Vector2(Screen.width, Screen.height) - Vector2.one * 0.5f;
-		if (Mathf.Abs(mousePosition.x) > 0.5f || Mathf.Abs(mousePosition.y) > 0.5f)
-			mousePosition = Vector2.zero;
-		mousePosition *= new Vector2(width, height);
-
-		return new Vector3(mousePosition.x, mousePosition.y, 0f);
-	}
-
     void InitBuffer()
 	{
-		_positionBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, numInstance, Marshal.SizeOf(typeof(Vector3)));
-		_velocityBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, numInstance, Marshal.SizeOf(typeof(Vector3)));
-		_smoothedPositionBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, numInstance, Marshal.SizeOf(typeof(Vector3)));
-		_smoothedVelocityBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, numInstance, Marshal.SizeOf(typeof(Vector3)));
+		var vfx = GetComponent<VisualEffect>();
+		vfx.SetFloat("NumInstance", _numInstance);
 
-		var positionArray = new Vector3[numInstance];
-		var velocityArray = new Vector3[numInstance];
-		for (var i = 0; i < numInstance; i++)
+		_positionBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, _numInstance, Marshal.SizeOf(typeof(Vector3)));
+		_velocityBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, _numInstance, Marshal.SizeOf(typeof(Vector3)));
+		_smoothedPositionBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, _numInstance, Marshal.SizeOf(typeof(Vector3)));
+		_smoothedVelocityBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, _numInstance, Marshal.SizeOf(typeof(Vector3)));
+
+		var positionArray = new Vector3[_numInstance];
+		var velocityArray = new Vector3[_numInstance];
+		for (var i = 0; i < _numInstance; i++)
 		{
-			positionArray[i] = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1)) * 10f;
+			positionArray[i] = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f)) * 5f;
 			var theta = Random.Range(-Mathf.PI, Mathf.PI);
 			var phi = Mathf.Asin(Random.Range(-1f, 1f));
 			velocityArray[i] = new Vector3(Mathf.Cos(phi) * Mathf.Cos(theta), Mathf.Cos(phi) * Mathf.Sin(theta), Mathf.Sin(phi)) * (_speedRange.x + _speedRange.y) * 0.5f;
@@ -227,7 +208,9 @@ public class Flocking : MonoBehaviour
 
 	void Simulation()
 	{
-		var _targetPosition = GetTargetPosition();
+		var _targetPosition = Vector3.zero;
+		if (_targetObject)
+			_targetPosition = _targetObject.transform.position;
 
 		ComputeShader cs = _flockingCS;
 		int kernelID = -1;
@@ -236,14 +219,14 @@ public class Flocking : MonoBehaviour
 
 		uint threadSizeX, threadSizeY, threadSizeZ;
 		cs.GetKernelThreadGroupSizes(kernelID, out threadSizeX, out threadSizeY, out threadSizeZ);
-		int threadGroupSize = Mathf.CeilToInt(numInstance / (float)threadSizeX);
+		int threadGroupSize = Mathf.CeilToInt(_numInstance / (float)threadSizeX);
 
 		cs.SetBuffer(kernelID, "_PositionBuffer", _positionBuffer);
 		cs.SetBuffer(kernelID, "_VelocityBuffer", _velocityBuffer);
 		cs.SetBuffer(kernelID, "_SmoothedPositionBuffer", _smoothedPositionBuffer);
 		cs.SetBuffer(kernelID, "_SmoothedVelocityBuffer", _smoothedVelocityBuffer);
 
-		cs.SetInt("_NumInstance", numInstance);
+		cs.SetInt("_NumInstance", _numInstance);
 
 		cs.SetVector("_SpeedRange", _speedRange);
 		cs.SetVector("_ForceWeight", _forceWeight);
@@ -252,7 +235,7 @@ public class Flocking : MonoBehaviour
 
 		cs.SetVector("_TargetPosition", _targetPosition);
 		cs.SetFloat("_TargetSeekForce", _targetSeekForce);
-		cs.SetFloat("_TargetClampDistance", _targetClampDistance);
+		cs.SetFloat("_TargetSeekClampDistance", _targetSeekClampDistance);
 
 		cs.SetFloat("_DeltaTime", Time.deltaTime);
 
@@ -270,8 +253,10 @@ public class Flocking : MonoBehaviour
 	void RenderInstancedMesh()
 	{
 		var vfx = GetComponent<VisualEffect>();
-		vfx.SetGraphicsBuffer("PositionBuffer", _smoothedPositionBuffer);
-		vfx.SetGraphicsBuffer("VelocityBuffer", _smoothedVelocityBuffer);
+		if (_smoothedPositionBuffer != null)
+			vfx.SetGraphicsBuffer("PositionBuffer", _smoothedPositionBuffer);
+		if (_smoothedVelocityBuffer != null)
+			vfx.SetGraphicsBuffer("VelocityBuffer", _smoothedVelocityBuffer);
 		vfx.SetVector2("ScaleRange", _scaleRange);
 		vfx.SetFloat("AnimationSpeed", _animationSpeed);
 	}

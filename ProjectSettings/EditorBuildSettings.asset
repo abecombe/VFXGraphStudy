@@ -8,7 +8,10 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Flower Garden/FlowerGarden.unity
     guid: f2cdb8734d7eeb14a81d261d61fce3fc
+  - enabled: 1
+    path: Assets/Scenes/Flocking/Flocking.unity
+    guid: 4cd653b895a624f4d930a02c75f80e59
   m_configObjects: {}
