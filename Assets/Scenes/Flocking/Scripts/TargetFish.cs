@@ -10,8 +10,8 @@ public class TargetFish : MonoBehaviour
         var height = -MainCamera.transform.position.z * Mathf.Tan(MainCamera.fieldOfView * 0.5f * Mathf.PI / 180f) * 2f;
         var width = height * Screen.width / Screen.height;
         var position = Input.mousePosition / new Vector2(Screen.width, Screen.height) - Vector2.one * 0.5f;
-        if (Mathf.Max(Mathf.Abs(position.x), Mathf.Abs(position.y)) > 0.5f)
-            position = Vector2.zero;
+        //if (Mathf.Max(Mathf.Abs(position.x), Mathf.Abs(position.y)) > 0.5f)
+        //    position = Vector2.zero;
         position *= new Vector2(width, height);
 
         return position;
