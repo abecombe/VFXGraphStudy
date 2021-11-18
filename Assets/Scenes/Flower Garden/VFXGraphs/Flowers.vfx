@@ -1175,9 +1175,9 @@ MonoBehaviour:
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots:
-  - {fileID: 8926484042661618415}
   - {fileID: 8926484042661615720}
   - {fileID: 8926484042661615721}
+  - {fileID: 8926484042661618415}
   m_OutputSlots: []
   m_Label: 
   m_Data: {fileID: 8926484042661615206}
@@ -1191,7 +1191,7 @@ MonoBehaviour:
   useAlphaClipping: 0
   generateMotionVector: 0
   excludeFromTAA: 0
-  materialOffset: 1
+  sortingPriority: 1
   m_SubOutputs:
   - {fileID: 8926484042661615724}
   cullMode: 0
@@ -1200,7 +1200,7 @@ MonoBehaviour:
   colorMapping: 0
   uvMode: 0
   useSoftParticle: 0
-  sortPriority: 0
+  vfxSystemSortPriority: 0
   sort: 0
   indirectDraw: 0
   computeCulling: 0
@@ -1212,16 +1212,16 @@ MonoBehaviour:
   materialSettings:
     m_PropertyNames: []
     m_PropertyValues: []
-  materialType: 0
-  onlyAmbientLighting: 0
-  diffusionProfileAsset: {fileID: 0}
-  multiplyThicknessWithAlpha: 0
   useBaseColorMap: 0
   useMaskMap: 0
   useNormalMap: 0
   useEmissiveMap: 0
   colorMode: 1
   useEmissive: 0
+  materialType: 0
+  onlyAmbientLighting: 0
+  diffusionProfileAsset: {fileID: 0}
+  multiplyThicknessWithAlpha: 0
   doubleSided: 0
   preserveSpecularLighting: 0
   enableShadows: 1
@@ -5447,7 +5447,7 @@ MonoBehaviour:
   useAlphaClipping: 0
   generateMotionVector: 0
   excludeFromTAA: 0
-  materialOffset: 0
+  sortingPriority: 0
   m_SubOutputs:
   - {fileID: 8926484042661616278}
   cullMode: 3
@@ -5456,7 +5456,7 @@ MonoBehaviour:
   colorMapping: 0
   uvMode: 0
   useSoftParticle: 0
-  sortPriority: 0
+  vfxSystemSortPriority: 0
   sort: 0
   indirectDraw: 0
   computeCulling: 0
@@ -5468,16 +5468,16 @@ MonoBehaviour:
   materialSettings:
     m_PropertyNames: []
     m_PropertyValues: []
-  materialType: 0
-  onlyAmbientLighting: 0
-  diffusionProfileAsset: {fileID: 0}
-  multiplyThicknessWithAlpha: 0
   useBaseColorMap: 0
   useMaskMap: 0
   useNormalMap: 0
   useEmissiveMap: 0
   colorMode: 1
   useEmissive: 0
+  materialType: 0
+  onlyAmbientLighting: 0
+  diffusionProfileAsset: {fileID: 0}
+  multiplyThicknessWithAlpha: 0
   doubleSided: 1
   preserveSpecularLighting: 0
   enableShadows: 1
@@ -9119,9 +9119,9 @@ MonoBehaviour:
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots:
-  - {fileID: 8926484042661617670}
   - {fileID: 8926484042661617033}
   - {fileID: 8926484042661617034}
+  - {fileID: 8926484042661617670}
   - {fileID: 8926484042661617035}
   - {fileID: 8926484042661617036}
   m_OutputSlots: []
@@ -9137,7 +9137,7 @@ MonoBehaviour:
   useAlphaClipping: 0
   generateMotionVector: 0
   excludeFromTAA: 0
-  materialOffset: 1
+  sortingPriority: 1
   m_SubOutputs:
   - {fileID: 8926484042661617041}
   cullMode: 0
@@ -9146,7 +9146,7 @@ MonoBehaviour:
   colorMapping: 0
   uvMode: 0
   useSoftParticle: 0
-  sortPriority: 0
+  vfxSystemSortPriority: 0
   sort: 0
   indirectDraw: 0
   computeCulling: 0
@@ -9158,16 +9158,16 @@ MonoBehaviour:
   materialSettings:
     m_PropertyNames: []
     m_PropertyValues: []
-  materialType: 0
-  onlyAmbientLighting: 0
-  diffusionProfileAsset: {fileID: 0}
-  multiplyThicknessWithAlpha: 0
   useBaseColorMap: 0
   useMaskMap: 0
   useNormalMap: 0
   useEmissiveMap: 0
   colorMode: 1
   useEmissive: 0
+  materialType: 0
+  onlyAmbientLighting: 0
+  diffusionProfileAsset: {fileID: 0}
+  multiplyThicknessWithAlpha: 0
   doubleSided: 0
   preserveSpecularLighting: 0
   enableShadows: 1

@@ -1,0 +1,125 @@
+#pragma kernel FlockingCS
+
+#include "UnityCG.cginc"
+
+#define alignment 0
+#define cohesion 1
+#define Separation 2
+
+RWStructuredBuffer<float3> _PositionBuffer;
+RWStructuredBuffer<float3> _VelocityBuffer;
+RWStructuredBuffer<float3> _SmoothedPositionBuffer;
+RWStructuredBuffer<float3> _SmoothedVelocityBuffer;
+
+int    _NumInstance;
+
+float2 _SpeedRange;       // min, max
+float3 _ForceWeight;      // alignment, cohesion, Separation
+float3 _PerceptionRadius; // alignment, cohesion, Separation
+float  _MaxSteerForce;
+
+float3 _TargetPosition;
+float  _TargetSeekForce;
+float  _TargetSeekClampDistance;
+
+float  _DeltaTime;
+
+float3 calcSteer(float3 forceSum, float3 velocity)
+{
+	float3 force = forceSum * _SpeedRange.y - velocity;
+	return normalize(force) * min(length(force), _MaxSteerForce);
+}
+
+float3 Flock(in float3 positionA, in float3 velocityA)
+{
+	int3 numFlockMates = (int3)0;
+	float3 alignmentSum  = (float3)0;
+	float3 cohesionSum   = (float3)0;
+	float3 SeparationSum = (float3)0;
+
+	for (int i = 0; i < _NumInstance; i++)
+	{
+		float3 positionB = _PositionBuffer[i];
+		float3 velocityB = _VelocityBuffer[i];
+
+		float3 offset = positionB - positionA;
+		float  distance = length(offset);
+
+		if (distance != 0 && distance < _PerceptionRadius[alignment])
+		{
+			numFlockMates[alignment]++;
+			alignmentSum += velocityB;
+		}
+		if (distance != 0 && distance < _PerceptionRadius[cohesion])
+		{
+			numFlockMates[cohesion]++;
+			cohesionSum += offset;
+		}
+		if (distance != 0 && distance < _PerceptionRadius[Separation])
+		{
+			numFlockMates[Separation]++;
+			SeparationSum -= offset / distance;
+		}
+	}
+
+	float3 alignmentForce  = (float3)0;
+	float3 cohesionForce   = (float3)0;
+	float3 SeparationForce = (float3)0;
+
+	if (numFlockMates[alignment] != 0)
+	{
+		alignmentForce    = calcSteer(normalize(alignmentSum), velocityA);
+	}
+	if (numFlockMates[cohesion] != 0)
+	{
+		cohesionForce = calcSteer(normalize(cohesionSum), velocityA);
+	}
+	if (numFlockMates[Separation] != 0)
+	{
+		SeparationForce = calcSteer(normalize(SeparationSum), velocityA);
+	}
+
+	float3 acceleration = (float3)0;
+	acceleration += alignmentForce  * _ForceWeight[alignment];
+	acceleration += cohesionForce   * _ForceWeight[cohesion];
+	acceleration += SeparationForce * _ForceWeight[Separation];
+	
+	return acceleration;
+}
+
+float3 SeekTarget(in float3 positionA, in float3 velocityA)
+{
+	float3 offset = _TargetPosition - positionA;
+	float distance = length(offset);
+	float force = clamp(distance, 0, _TargetSeekClampDistance) / _TargetSeekClampDistance;
+
+	float3 seekForce = calcSteer(normalize(offset) * force, velocityA);
+	float3 acceleration = seekForce * _TargetSeekForce;
+	
+	return acceleration;
+}
+
+[numthreads(256, 1, 1)]
+void FlockingCS(uint3 DTid : SV_DispatchThreadID)
+{
+	const unsigned int P_ID = DTid.x;
+
+	float3 position = _PositionBuffer[P_ID];
+	float3 velocity = _VelocityBuffer[P_ID];
+	float3 smoothedPosition = _SmoothedPositionBuffer[P_ID];
+	float3 smoothedVelocity = _SmoothedVelocityBuffer[P_ID];
+
+	float3 acceleration = (float3)0;
+	acceleration += Flock(position, velocity);
+	acceleration += SeekTarget(position, velocity);
+
+	velocity += acceleration * _DeltaTime;
+	velocity = normalize(velocity) * clamp(length(velocity), _SpeedRange.x, _SpeedRange.y);
+
+	position += velocity * _DeltaTime;
+
+	_PositionBuffer[P_ID] = position;
+	_VelocityBuffer[P_ID] = velocity;
+	_SmoothedPositionBuffer[P_ID] = 0.925 * smoothedPosition + 0.075 * position;
+	_SmoothedVelocityBuffer[P_ID] = 0.925 * smoothedVelocity + 0.075 * velocity;
+}

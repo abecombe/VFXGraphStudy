@@ -3481,10 +3481,10 @@ MonoBehaviour:
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots:
-  - {fileID: 8926484042661614762}
-  - {fileID: 8926484042661615384}
   - {fileID: 8926484042661614753}
   - {fileID: 8926484042661615382}
+  - {fileID: 8926484042661614762}
+  - {fileID: 8926484042661615384}
   - {fileID: 8926484042661614760}
   m_OutputSlots: []
   m_Label: Left Wing
@@ -3499,7 +3499,7 @@ MonoBehaviour:
   useAlphaClipping: 0
   generateMotionVector: 1
   excludeFromTAA: 0
-  materialOffset: 2
+  sortingPriority: 2
   m_SubOutputs:
   - {fileID: 8926484042661615056}
   cullMode: 0
@@ -3508,7 +3508,7 @@ MonoBehaviour:
   colorMapping: 0
   uvMode: 1
   useSoftParticle: 0
-  sortPriority: 0
+  vfxSystemSortPriority: 0
   sort: 0
   indirectDraw: 0
   computeCulling: 0
@@ -3520,16 +3520,16 @@ MonoBehaviour:
   materialSettings:
     m_PropertyNames: []
     m_PropertyValues: []
-  materialType: 0
-  onlyAmbientLighting: 0
-  diffusionProfileAsset: {fileID: 0}
-  multiplyThicknessWithAlpha: 0
   useBaseColorMap: 3
   useMaskMap: 0
   useNormalMap: 0
   useEmissiveMap: 0
   colorMode: 1
   useEmissive: 0
+  materialType: 0
+  onlyAmbientLighting: 0
+  diffusionProfileAsset: {fileID: 0}
+  multiplyThicknessWithAlpha: 0
   doubleSided: 1
   preserveSpecularLighting: 0
   enableShadows: 1
@@ -3810,10 +3810,10 @@ MonoBehaviour:
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots:
-  - {fileID: 8926484042661614808}
-  - {fileID: 8926484042661614811}
   - {fileID: 8926484042661614812}
   - {fileID: 8926484042661615383}
+  - {fileID: 8926484042661614808}
+  - {fileID: 8926484042661614811}
   - {fileID: 8926484042661614814}
   m_OutputSlots: []
   m_Label: Right Wing
@@ -3828,7 +3828,7 @@ MonoBehaviour:
   useAlphaClipping: 0
   generateMotionVector: 1
   excludeFromTAA: 0
-  materialOffset: 2
+  sortingPriority: 2
   m_SubOutputs:
   - {fileID: 8926484042661615057}
   cullMode: 0
@@ -3837,7 +3837,7 @@ MonoBehaviour:
   colorMapping: 0
   uvMode: 1
   useSoftParticle: 0
-  sortPriority: 0
+  vfxSystemSortPriority: 0
   sort: 0
   indirectDraw: 0
   computeCulling: 0
@@ -3849,16 +3849,16 @@ MonoBehaviour:
   materialSettings:
     m_PropertyNames: []
     m_PropertyValues: []
-  materialType: 0
-  onlyAmbientLighting: 0
-  diffusionProfileAsset: {fileID: 0}
-  multiplyThicknessWithAlpha: 0
   useBaseColorMap: 3
   useMaskMap: 0
   useNormalMap: 0
   useEmissiveMap: 0
   colorMode: 1
   useEmissive: 0
+  materialType: 0
+  onlyAmbientLighting: 0
+  diffusionProfileAsset: {fileID: 0}
+  multiplyThicknessWithAlpha: 0
   doubleSided: 1
   preserveSpecularLighting: 0
   enableShadows: 1
