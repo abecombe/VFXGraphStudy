@@ -180,6 +180,7 @@ public class Flocking : MonoBehaviour
     void InitBuffer()
 	{
 		var vfx = GetComponent<VisualEffect>();
+		vfx.Reinit();
 		vfx.SetFloat("NumInstance", _numInstance);
 
 		_positionBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, _numInstance, Marshal.SizeOf(typeof(Vector3)));
